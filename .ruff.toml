@@ -1,0 +1,33 @@
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".git",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "build",
+    "dist",
+    ".gitignore"
+]
+
+line-length = 200
+indent-width = 4
+
+[lint]
+select = ["ALL"]
+ignore = ["ANN001", "ARG002", "BLE001", "D100", "D102", "D107", "D203", "D213", "D413", "EM101", "N806", "PLR2004", "T201", "TRY003", "TRY301", "UP015"]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings.
+docstring-code-format = false
