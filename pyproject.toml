@@ -1,0 +1,19 @@
+[project]
+name = "qc803-assignment"
+version = "0.1.0"
+description = "Assignment for Quantum Programming"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    {name = "Filippo Barbieri", email = "fibar25@student.sdu.dk"},
+    {name = "Gergely Lendvay", email = "gelen25@student.sdu.dk"}
+]
+keywords = []
+dependencies = []
+
+[project.urls]
+homepage = "https://github.com/gegelendvay/qc803_assignment"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
