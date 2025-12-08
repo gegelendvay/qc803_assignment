@@ -14,9 +14,9 @@ GitHub repository for the QC803 final assignment for [[9,1,3]] Shor Code.
 
 # Setup
 ## Installation
-1. Clone the repository by running: git clone git@github.com:gegelendvay/qc803_assignment.git
-2. Create a virtual environment in the project's root directory: pyhon3 -m venv .venv
-3. Activate the virtual environment: . .venv/bin/activate
+1. Clone the repository by running: git clone `git@github.com:gegelendvay/qc803_assignment.git`
+2. Create a virtual environment in the project's root directory: `pyhon3 -m venv .venv`
+3. Activate the virtual environment: `. .venv/bin/activate`
 
 # Usage
 ## Starting the Application
