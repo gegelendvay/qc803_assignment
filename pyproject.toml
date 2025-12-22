@@ -9,7 +9,12 @@ authors = [
     {name = "Gergely Lendvay", email = "gelen25@student.sdu.dk"}
 ]
 keywords = []
-dependencies = []
+dependencies = [
+    "qiskit==2.2.3",
+    "qiskit-aer==0.17.2",
+    "pytest==9.0.2",
+    "pytest-cov==7.0.0"
+]
 
 [project.urls]
 homepage = "https://github.com/gegelendvay/qc803_assignment"
