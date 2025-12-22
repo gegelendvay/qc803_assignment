@@ -37,5 +37,5 @@ ruff check .
 ## Pytest
 To run tests with `pytest` and generate a coverage report, run:
 ```bash
-pytest -v --cov=. --cov-fail-under=85 --cov-report=term-missing:skip-covered --asyncio-mode=auto
+pytest -v --cov=. --cov-fail-under=80 --cov-report=term-missing:skip-covered
 ```

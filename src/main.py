@@ -1,9 +1,9 @@
 # https://quantum.cloud.ibm.com/learning/en/courses/foundations-of-quantum-error-correction/correcting-quantum-errors/shor-code
-import sys
-import random
 import argparse
+import random
+
+from qiskit import ClassicalRegister, QuantumCircuit
 from qiskit_aer import AerSimulator
-from qiskit import QuantumCircuit, ClassicalRegister
 
 backend = AerSimulator()
 
@@ -22,15 +22,15 @@ def create_circuit(input_state):
     # classical registers for syndrome measurement outcomes
     cr_z = []
     for i in range(3):
-        register = (ClassicalRegister(2, f'cr_z{i}'))
+        register = (ClassicalRegister(2, f"cr_z{i}"))
         qc.add_register(register)
         cr_z.append(register)
 
-    cr_x = ClassicalRegister(2, 'cr_x')
+    cr_x = ClassicalRegister(2, "cr_x")
     qc.add_register(cr_x)
 
     # classical register for final logical qubit measurement
-    result = ClassicalRegister(1, 'logical_result')
+    result = ClassicalRegister(1, "logical_result")
     qc.add_register(result)
     return qc, cr_z, cr_x, result
 
@@ -62,11 +62,11 @@ def inject_error_sequentially(qc, index):
 
 def inject_arbitrary_error(qc, error_type, q):
     q = q if q is not None else random.randint(0,8)
-    if error_type == 'x':
+    if error_type == "x":
         qc.x(q)
-    elif error_type == 'z':
+    elif error_type == "z":
         qc.z(q)
-    elif error_type == 'y':
+    elif error_type == "y":
         qc.y(q)
     else:  # random error with equal probabilities
         r = random.random()
@@ -192,7 +192,7 @@ def positive_int(value):
     ivalue = int(value)
     if ivalue <= 0:
         raise argparse.ArgumentTypeError(
-            "num-simulations must be a positive integer (> 0)"
+            "num-simulations must be a positive integer (> 0)",
         )
     return ivalue
 
@@ -202,7 +202,7 @@ def int_range(min_val, max_val):
         ivalue = int(value)
         if ivalue < min_val or ivalue > max_val:
             raise argparse.ArgumentTypeError(
-                f"qubit-error must be in range [{min_val}, {max_val}]"
+                f"qubit-error must be in range [{min_val}, {max_val}]",
             )
         return ivalue
     return _range_checker
@@ -211,72 +211,72 @@ def int_range(min_val, max_val):
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Shor's code QEC simulation",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
     parser.add_argument(
         "--num-simulations",
         type=positive_int,
         default=1,
-        help="Number of simulations (positive integer)"
+        help="Number of simulations (positive integer)",
     )
 
     parser.add_argument(
         "--arbitrary-error",
         choices=["x", "y", "z"],
-        help="Arbitrary error type"
+        help="Arbitrary error type",
     )
 
     parser.add_argument(
         "--qubit-error",
         type=int_range(0, 8),
-        help="Qubit on which apply the error (integer from 0 to 8)"
+        help="Qubit on which apply the error (integer from 0 to 8)",
     )
 
     parser.add_argument(
         "--input-state",
         type=int,
         choices=[0, 1],
-        help="Initial logical state"
+        help="Initial logical state",
     )
 
     parser.add_argument(
         "--draw-circuit",
         default=False,
         action="store_true",
-        help="Draw all circuits simulated and save as PNG file"
+        help="Draw all circuits simulated and save as PNG file",
     )
 
     return parser.parse_args()
 
-# parse command line arguments
-args = parse_arguments()
+if __name__ == "__main__":
+    args = parse_arguments()
 
-# run simulation for n times given as command line argument
-correctness = True
-n = args.num_simulations
+    # run simulation for n times given as command line argument
+    correctness = True
+    n = args.num_simulations
 
-for s in range(args.num_simulations):
-    # retrieve input state or choose randomly for each simulation
-    if args.input_state is not None:
-        input_state = args.input_state
-    else:
-        input_state = random.randint(0, 1)
+    for s in range(args.num_simulations):
+        # retrieve input state or choose randomly for each simulation
+        if args.input_state is not None:
+            input_state = args.input_state
+        else:
+            input_state = random.randint(0, 1)
 
-    # build circuit with (un)specified errors
-    qc = build_circuit(s, input_state, args.arbitrary_error, args.qubit_error)
+        # build circuit with (un)specified errors
+        qc = build_circuit(s, input_state, args.arbitrary_error, args.qubit_error)
 
-    # print measurement only if final measurement is different from input state
-    counts = run_simulation(qc)
-    if next(iter(counts))[0] != str(input_state):
-        correctness = False
-        print(f"{s}: {input_state} -> {counts.keys()}")
+        # print measurement only if final measurement is different from input state
+        counts = run_simulation(qc)
+        if next(iter(counts))[0] != str(input_state):
+            correctness = False
+            print(f"{s}: {input_state} -> {counts.keys()}")
 
-    # draw circuit if requested
-    if args.draw_circuit:
-        fig = qc.draw('mpl', fold=False, cregbundle=False)
-        fig.savefig(f"circuit_{s}.png")
+        # draw circuit if requested
+        if args.draw_circuit:
+            fig = qc.draw("mpl", fold=False, cregbundle=False)
+            fig.savefig(f"circuit_{s}.png")
 
-# print overall correctness
-if correctness:
-    print(f"All simulations correct!")
+    # print overall correctness
+    if correctness:
+        print("All simulations correct!")
