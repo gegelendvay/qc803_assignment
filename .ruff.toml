@@ -6,7 +6,8 @@ exclude = [
     "__pypackages__",
     "build",
     "dist",
-    ".gitignore"
+    ".gitignore",
+    "tests/"
 ]
 
 line-length = 200
