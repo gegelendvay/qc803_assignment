@@ -12,8 +12,16 @@ BLOCKS = [(0,1,2), (3,4,5), (6,7,8)]
 ANCILLAS_Z = [(9,10), (11,12), (13,14)]
 ANCILLAS_X = [15,16]
 
-# 9 data qubits + 6 ancilla qubits for Z-type syndrome + 2 ancilla qubits for X-type syndrome
 def create_circuit(input_state) -> QuantumCircuit:
+    """Create a 17 qubit Shor's code cicuit with 9 data qubits, 6 ancilla qubits for Z-type syndrome, and 2 ancilla qubits for X-type syndrome.
+
+    Args:
+        input_state (int): Logical input state
+
+    Returns:
+        QuantumCircuit: The initialized quantum circuit.
+    """
+
     qc = QuantumCircuit(17)
 
     if input_state == 1:
@@ -35,6 +43,7 @@ def create_circuit(input_state) -> QuantumCircuit:
     return qc, cr_z, cr_x, result
 
 def encode_qubit(qc) -> None:
+    """Encode logical qubit into Shor code."""
     # spreads logical qubit to the first qubit of each block
     qc.cx(0,3)
     qc.cx(0,6)
@@ -49,6 +58,8 @@ def encode_qubit(qc) -> None:
     qc.barrier()
 
 def inject_error_sequentially(qc, index) -> None:
+    """Inject error sequentially."""
+
     if index < 9:
         qc.x(index)
     elif index < 18:
@@ -61,6 +72,8 @@ def inject_error_sequentially(qc, index) -> None:
     qc.barrier()
 
 def inject_arbitrary_error(qc, error_type, q) -> None:
+    """Inject an arbitrary error."""
+
     q = q if q is not None else random.randint(0,8)
     if error_type == "x":
         qc.x(q)
@@ -80,7 +93,8 @@ def inject_arbitrary_error(qc, error_type, q) -> None:
     qc.barrier()
 
 def measure_z_syndrome(qc, cr_z) -> None:
-    # -- Z-type syndrome measurement for X errors (bit flips) --
+    """Measure Z-type syndrome for X errors (bit flips)."""
+
     for i, block in enumerate(BLOCKS):
         a1, a2 = ANCILLAS_Z[i]
         cbits_z = cr_z[i]
@@ -98,7 +112,8 @@ def measure_z_syndrome(qc, cr_z) -> None:
     qc.barrier()
 
 def measure_x_syndrome(qc, cr_x) -> None:
-    # -- X-type syndrome measurement for Z errors (phase flips, HXH = Z) --
+    """Measure X-type syndrome for Z errors (phase flips, HXH = Z)."""
+
     for i in DATA_QUBITS:
         qc.h(i)
 
@@ -119,12 +134,14 @@ def measure_x_syndrome(qc, cr_x) -> None:
     qc.barrier()
 
 def reset_ancillas(qc) -> None:
-    # after measurement, reset ancilla qubits for possible reuse
+    """Reset ancilla qubits after syndrome measurement."""
+
     for i in range(9,17):
         qc.reset(i)
 
 def correct_bit_flips(qc, cr_z) -> None:
-    # -- bit-flip correction (X errors) using Z-type syndromes --
+    """Correct bit flips (X errors) using Z-type syndromes."""
+
     for i, block in enumerate(BLOCKS):
         q0, q1, q2 = block
         with qc.if_test((cr_z[i], 0b01)):
@@ -137,7 +154,8 @@ def correct_bit_flips(qc, cr_z) -> None:
     qc.barrier()
 
 def correct_phase_flips(qc, cr_x) -> None:
-    # -- phase-flip correction (Z errors) using X-type syndromes --
+    """Correct phase flips (Z errors) using X-type syndromes."""
+
     with qc.if_test((cr_x, 0b01)):
         qc.z(0)
     with qc.if_test((cr_x, 0b11)):
@@ -148,7 +166,8 @@ def correct_phase_flips(qc, cr_x) -> None:
     qc.barrier()
 
 def decode_qubit(qc) -> None:
-    # -- decoding --
+    """Decode the logical qubit."""
+
     for i in [0,3,6]:
         qc.cx(i, i+1)
         qc.cx(i, i+2)
@@ -160,10 +179,13 @@ def decode_qubit(qc) -> None:
     qc.ccx(3,6,0)
 
 def measure(qc, result) -> None:
-    # measure the logical qubit
+    """Measure the logical qubit."""
+
     qc.measure(0, result[0])
 
 def build_circuit(index, input_state, arbitrary_error, qubit_error) -> QuantumCircuit:
+    """Build the quantum circuit for the Shor's code."""
+
     qc, cr_z, cr_x, result = create_circuit(input_state)
 
     encode_qubit(qc)
@@ -172,7 +194,7 @@ def build_circuit(index, input_state, arbitrary_error, qubit_error) -> QuantumCi
     else:
         inject_arbitrary_error(qc, arbitrary_error, qubit_error)
     measure_z_syndrome(qc, cr_z)
-    # reset_ancillas(qc) # Anchilla bits remain entangled, no?
+    # reset_ancillas(qc) # Ancilla bits remain entangled, no?
     measure_x_syndrome(qc, cr_x)
     # reset_ancillas(qc)
     correct_bit_flips(qc, cr_z)
@@ -183,13 +205,16 @@ def build_circuit(index, input_state, arbitrary_error, qubit_error) -> QuantumCi
     return qc
 
 def run_simulation(qc, shots=1) -> dict:
+    """Run the quantum circuit simulation."""
+
     backend = AerSimulator()
     # single shot is enough as there is no randomness in the circuit
     job = backend.run(qc, shots=shots).result()
     return job.get_counts()
 
-# check that num-simulations is a positive integer
 def positive_int(value) -> int:
+    """Check that the num-simulations value is a positive integer."""
+
     ivalue = int(value)
     if ivalue <= 0:
         raise argparse.ArgumentTypeError(
@@ -197,9 +222,10 @@ def positive_int(value) -> int:
         )
     return ivalue
 
-# check that qubit-error is in the range of the data qubits
 def int_range(min_val, max_val) -> callable:
+    """Check that the qubit-error value is in the range of the data qubits."""
     def _range_checker(value) -> int:
+        """Check that the qubit-error value is in the range of the data qubits."""
         ivalue = int(value)
         if ivalue < min_val or ivalue > max_val:
             msg = f"qubit-error must be in range [{min_val}, {max_val}]"
@@ -208,6 +234,8 @@ def int_range(min_val, max_val) -> callable:
     return _range_checker
 
 def plot_histogram(counts) -> None:
+    """Plot the histogram of measurement results."""
+
     results = {"0": 0, "1": 0}
     for key, value in counts.items():
         results[key[0]] += value
@@ -218,8 +246,8 @@ def plot_histogram(counts) -> None:
     plt.title("Measurement Results")
     plt.show()
 
-# parser for command line arguments
 def parse_arguments() -> argparse.ArgumentParser:
+    """Parser for command line arguments."""
     parser = argparse.ArgumentParser(
         description="Shor's code QEC simulation",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
