@@ -25,7 +25,7 @@ def create_circuit(input_state) -> QuantumCircuit:
     qc = QuantumCircuit(17)
 
     if input_state == 1:
-        qc.z(0)  # prepare logical |1> state
+        qc.x(0)  # prepare logical |1> state
 
     # classical registers for syndrome measurement outcomes
     cr_z = []
