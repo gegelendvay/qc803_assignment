@@ -1,4 +1,3 @@
-# https://quantum.cloud.ibm.com/learning/en/courses/foundations-of-quantum-error-correction/correcting-quantum-errors/shor-code
 import argparse
 import random
 
@@ -154,9 +153,9 @@ def decode_qubit(qc):
         qc.cx(i, i+2)
         qc.ccx(i+1, i+2, i)
         qc.h(i)
-    # double check logical qubit decoding
     qc.cx(0,3)
     qc.cx(0,6)
+    # double check logical qubit decoding
     qc.ccx(3,6,0)
 
 def measure(qc, result):
