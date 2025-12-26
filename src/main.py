@@ -311,6 +311,7 @@ if __name__ == "__main__":
         if args.draw_circuit:
             fig = qc.draw("mpl", fold=False, cregbundle=False)
             fig.savefig(f"circuit_{s}.png")
+            plt.close()
 
     # print overall correctness
     if correctness:
