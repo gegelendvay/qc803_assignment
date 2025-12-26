@@ -4,6 +4,7 @@ import random
 import matplotlib.pyplot as plt
 from qiskit import ClassicalRegister, QuantumCircuit
 from qiskit_aer import AerSimulator
+from collections import Counter
 
 backend = AerSimulator()
 
@@ -240,7 +241,7 @@ def plot_histogram(counts) -> None:
     plt.xlabel("Measurement Results")
     plt.ylabel("Counts")
     plt.title("Measurement Results")
-    plt.show()
+    plt.savefig("results_histogram.png")
 
 def parse_arguments() -> argparse.ArgumentParser:
     """Parser for command line arguments."""
@@ -289,21 +290,22 @@ if __name__ == "__main__":
 
     # run simulation for n times given as command line argument
     correctness = True
+    total_counts = Counter()
     n = args.num_simulations
 
+    # retrieve input state or choose randomly for each simulation
+    input_state = (args.input_state if args.input_state is not None else random.randint(0, 1))
+    
     for s in range(args.num_simulations):
-        # retrieve input state or choose randomly for each simulation
-        input_state = (args.input_state if args.input_state is not None else random.randint(0, 1))
         # build circuit with (un)specified errors
         qc = build_circuit(s, input_state, args.arbitrary_error, args.qubit_error)
 
         # print measurement only if final measurement is different from input state
         counts = run_simulation(qc, shots=1)
+        total_counts.update(counts)
         if next(iter(counts))[0] != str(input_state):
             correctness = False
             print(f"{s}: {input_state} -> {counts.keys()}")
-
-        plot_histogram(counts)
 
         # draw circuit if requested
         if args.draw_circuit:
@@ -313,3 +315,4 @@ if __name__ == "__main__":
     # print overall correctness
     if correctness:
         print("All simulations correct!")
+    plot_histogram(total_counts)
