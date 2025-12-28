@@ -206,8 +206,21 @@ def int_range(min_val, max_val):
         return ivalue
     return _range_checker
 
-# parser for command line arguments
-def parse_arguments():
+def plot_histogram(counts) -> None: # pragma: no cover
+    """Plot the histogram of measurement results."""
+
+    results = {"0": 0, "1": 0}
+    for key, value in counts.items():
+        results[key[0]] += value
+
+    plt.bar(results.keys(), results.values())
+    plt.xlabel("Measurement Results")
+    plt.ylabel("Counts")
+    plt.title("Measurement Results")
+    plt.show()
+
+def parse_arguments() -> argparse.ArgumentParser: # pragma: no cover
+    """Parser for command line arguments."""
     parser = argparse.ArgumentParser(
         description="Shor's code QEC simulation",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -248,7 +261,7 @@ def parse_arguments():
 
     return parser.parse_args()
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     args = parse_arguments()
 
     # run simulation for n times given as command line argument

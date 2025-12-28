@@ -4,6 +4,11 @@ from qiskit import QuantumCircuit
 
 import src.main as sc
 
+# Functions, such as plot_histogram(), parse_arguments(), as well as the script entry block (__main__) are skipped from coverage because:
+# 1. They don't contain core computational logic
+# 2. Testing them would require GUI interactions, command-line argument manipulation, or full script execution, all of which are outside the scope of unit tests
+# 3. Skipping them allows the coverage to focus on the actual logic 
+
 def create_test_circuit(input_state=0):
     qc, cr_z, cr_x, result = sc.create_circuit(input_state)
     return qc, cr_z, cr_x, result
@@ -61,18 +66,16 @@ def test_reset_ancillas():
     assert isinstance(qc, QuantumCircuit)
 
 # correct_bit_flips()
-@pytest.mark.skip(reason="Assertion value")
 def test_correct_bit_flips():
     qc, cr_z, _cr_x, _result = create_test_circuit()
     sc.correct_bit_flips(qc, cr_z)
-    assert qc.count_ops().get("x", 0) == ""
+    assert qc.count_ops().get("x", 0) == 0
 
 # correct_phase_flips()
-@pytest.mark.skip(reason="Assertion value")
 def test_correct_phase_flips():
     qc, _cr_z, cr_x, _result = create_test_circuit()
     sc.correct_phase_flips(qc, cr_x)
-    assert qc.count_ops().get("z", 0) == ""
+    assert qc.count_ops().get("z", 0) == 0
 
 # decode_qubit()
 def test_decode_qubit():
