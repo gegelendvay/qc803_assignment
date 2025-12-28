@@ -17,6 +17,7 @@ GitHub repository for the QC803 final assignment for [[9,1,3]] Shor Code.
 1. Clone the repository by running: git clone `git@github.com:gegelendvay/qc803_assignment.git`
 2. Create a virtual environment in the project's root directory: `pyhon3 -m venv .venv`
 3. Activate the virtual environment: `. .venv/bin/activate`
+4. Install the required dependencies using either of the following commands: `python3 -m pip install .` or `pip install -r requirements.txt`
 
 # Usage
 ## Starting the Application
@@ -37,5 +38,5 @@ ruff check .
 ## Pytest
 To run tests with `pytest` and generate a coverage report, run:
 ```bash
-pytest -v --cov=. --cov-fail-under=80 --cov-report=term-missing:skip-covered
+pytest -v --cov=. --cov-fail-under=85 --cov-report=term-missing:skip-covered
 ```

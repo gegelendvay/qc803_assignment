@@ -1,10 +1,10 @@
 import argparse
 import random
+from collections import Counter
 
 import matplotlib.pyplot as plt
 from qiskit import ClassicalRegister, QuantumCircuit
 from qiskit_aer import AerSimulator
-from collections import Counter
 
 backend = AerSimulator()
 
@@ -295,7 +295,7 @@ if __name__ == "__main__": # pragma: no cover
 
     # retrieve input state or choose randomly for each simulation
     input_state = (args.input_state if args.input_state is not None else random.randint(0, 1))
-    
+
     for s in range(args.num_simulations):
         # build circuit with (un)specified errors
         qc = build_circuit(s, input_state, args.arbitrary_error, args.qubit_error)
