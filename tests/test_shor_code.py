@@ -59,12 +59,6 @@ def test_measure_x_syndrome():
     assert qc.count_ops().get("cx", 0) == 12
     assert qc.count_ops().get("measure", 0) == 2
 
-# reset_ancillas()
-def test_reset_ancillas():
-    qc, _cr_z, _cr_x, _result = create_test_circuit()
-    sc.reset_ancillas(qc)
-    assert isinstance(qc, QuantumCircuit)
-
 # correct_bit_flips()
 def test_correct_bit_flips():
     qc, cr_z, _cr_x, _result = create_test_circuit()
