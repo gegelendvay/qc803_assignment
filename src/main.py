@@ -241,7 +241,7 @@ def plot_histogram(counts) -> None: # pragma: no cover
     plt.xlabel("Measurement Results")
     plt.ylabel("Counts")
     plt.title("Measurement Results")
-    plt.show()
+    plt.savefig("results_histogram.png")
 
 def parse_arguments() -> argparse.ArgumentParser: # pragma: no cover
     """Parser for command line arguments."""
