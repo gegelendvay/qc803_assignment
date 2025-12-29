@@ -104,13 +104,11 @@ def measure_z_syndrome(qc, cr_z) -> None:
         qc.cx(block[0], a1)
         qc.cx(block[1], a1)
         qc.measure(a1, cbits_z[0])
-        qc.reset(a1)
 
         # S2 = Z_b Z_c
         qc.cx(block[1], a2)
         qc.cx(block[2], a2)
         qc.measure(a2, cbits_z[1])
-        qc.reset(a2)
 
     qc.barrier()
 
@@ -124,13 +122,11 @@ def measure_x_syndrome(qc, cr_x) -> None:
     for i in range(6):
         qc.cx(i, ANCILLAS_X[0])
     qc.measure(ANCILLAS_X[0], cr_x[0])
-    qc.reset(ANCILLAS_X[0])
 
     # S2 = X3 X4 X5 X6 X7 X8
     for i in range(3, 9):
         qc.cx(i, ANCILLAS_X[1])
     qc.measure(ANCILLAS_X[1], cr_x[1])
-    qc.reset(ANCILLAS_X[1])
 
     # reverse HXH
     for i in DATA_QUBITS:
