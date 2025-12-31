@@ -262,7 +262,7 @@ def parse_arguments() -> argparse.ArgumentParser: # pragma: no cover
     parser.add_argument(
         "--qubit-error",
         type=int_range(0, 8),
-        help="Qubit on which apply the error (integer from 0 to 8)",
+        help="Qubit on which to apply the error (integer from 0 to 8)",
     )
 
     parser.add_argument(
@@ -292,7 +292,7 @@ if __name__ == "__main__": # pragma: no cover
     # retrieve input state or choose randomly for each simulation
     input_state = (args.input_state if args.input_state is not None else random.randint(0, 1))
 
-    for s in range(args.num_simulations):
+    for s in range(n):
         # build circuit with (un)specified errors
         qc = build_circuit(s, input_state, args.arbitrary_error, args.qubit_error)
 

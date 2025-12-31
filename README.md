@@ -28,6 +28,16 @@ GitHub repository for the QC803 final assignment for [[9,1,3]] Shor Code.
 1. Activate the virtual environment: `. .venv/bin/activate`
 2. Start the application by running: `python3 src/main.py`
 
+Optionally, command line arguments can be added to the above command:
+
+|      Argument     |             Description            | Type | Default |
+|:-----------------:|:----------------------------------:|:----:|:-------:|
+| --num-simulations | Number of simulations to run       |  int |       1 |
+| --arbitrary-error | Arbitrary error type               |  str |       - |
+|   --qubit-error   | Index of a qubit to apply error on |  int |       - |
+|   --input-state   | Initial logical state              |  int |       - |
+|   --draw-circuit  | Save circuit diagrams              | bool |   False |
+
 # Testing
 ## Linting
 To perform linting checks, run:

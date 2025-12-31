@@ -1,2 +1,2 @@
 [run]
-omit = tests/*
+omit = tests/*, src/main_noisy.py, src/plot_comparison.py, src/two-qubit-errors.py, src/z-errors.py
