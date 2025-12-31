@@ -5,6 +5,7 @@
     - [Installation](#installation)
 - [Usage](#usage)
     - [Starting the Application](#starting-the-application)
+    - [Experiment Outcomes](#experiment-outcomes)
 - [Testing](#testing)
     - [Linting](#linting)
     - [Pytest](#pytest)
@@ -37,6 +38,13 @@ Optionally, command line arguments can be added to the above command:
 |   --qubit-error   | Index of a qubit to apply error on |  int |       - |
 |   --input-state   | Initial logical state              |  int |       - |
 |   --draw-circuit  | Save circuit diagrams              | bool |   False |
+
+## Experiment Outcomes
+The outcome of the experiments can be found in the following file: `results_histogram.png`.
+
+When using the `--draw-circuit` command line argument, a diagram of the circuit will be saved to `circuit_{s}.png` file, where `s` is the index of the simulation.
+
+When executing the `plot_comparison.py` file, results will be saved to `shor_syndrome_comparison.png`.
 
 # Testing
 ## Linting
